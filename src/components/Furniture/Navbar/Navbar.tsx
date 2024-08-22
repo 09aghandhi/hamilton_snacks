@@ -43,7 +43,7 @@ const Navbar: Component = () => {
             <a href="/profile">👤 Profile</a>
             <a href="/profile">⚙️ Preferences</a>
           </Show>
-          <a href="#">🐛 Report a Bug</a>
+          <a href="https://forms.gle/3tvjMtab4av8MdpcA">🐛 Report a Bug</a>
           <a href="https://github.com/lissy93/cso">💽 Source Code</a>
           <span onClick={logout}>🏃 Logout</span>
         </div>
