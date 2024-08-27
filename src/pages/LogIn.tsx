@@ -23,6 +23,7 @@ const LoginPage = () => {
   const signInWithGoogle = async () => {
     console.log("signInWithGoogle function called");
 
+    // Sign in with Google OAuth
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
     });
@@ -35,15 +36,10 @@ const LoginPage = () => {
 
     console.log("Google sign-in successful, checking session");
 
-    // Wait for the session to be initialized
-    let session = null;
-    for (let i = 0; i < 5; i++) {
-      console.log(`Attempt ${i + 1} to retrieve session`);
-      const { data } = await supabase.auth.getSession();
-      session = data.session;
-      if (session) break;
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before trying again
-    }
+    // Retrieve the session immediately after the sign-in
+    const { data: { session } } = await supabase.auth.getSession();
+
+    console.log("Session retrieved:", session);
 
     if (!session || !session.user) {
       console.error("No session or user found after sign-in");
