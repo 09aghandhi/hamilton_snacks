@@ -159,6 +159,25 @@ create table
   ) tablespace pg_default;
 ```
 
+#### Preferances
+```sql
+  CREATE TABLE public."Preferences" (
+    user_id uuid NOT NULL,
+    theme character varying NOT NULL DEFAULT 'light',
+    enable_notifications boolean NOT NULL DEFAULT false,
+    language character varying(10) NOT NULL DEFAULT 'en-GB',
+    enable_error_reporting boolean NOT NULL DEFAULT true,
+    enable_analytics boolean NOT NULL DEFAULT false,
+    dietary_requirements text[] NULL,
+    snack_preferences text NULL,
+    office_frequency character varying(50) NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at timestamp with time zone NULL,
+    CONSTRAINT Preferences_pkey PRIMARY KEY (user_id),
+    CONSTRAINT Preferences_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users (id) ON UPDATE CASCADE ON DELETE CASCADE
+  ) TABLESPACE pg_default;
+```
+
 #### Enums
 ```
 snack_category: sweet, savory, healthy, drink	
