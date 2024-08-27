@@ -1,10 +1,8 @@
 import { useNavigate } from '@solidjs/router';
 import { styled } from 'solid-styled-components';
-import { isAuthenticated } from '../services/authService';
 import supabase from '../services/supabaseClient';
 import Card from '../components/atoms/Card';
 import Button from '../components/atoms/Button';
-import { createEffect } from 'solid-js';
 
 const SnackBot = styled('img')`
   position: absolute;
@@ -21,17 +19,6 @@ const SnackBot = styled('img')`
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  // Redirect to home page if already authenticated
-  createEffect(() => {
-    console.log("Running createEffect to check authentication status");
-    if (isAuthenticated()) {
-      console.log("User is authenticated, navigating to home page");
-      navigate('/');
-    } else {
-      console.log("User is not authenticated, staying on login page");
-    }
-  });
-
   const signInWithGoogle = async () => {
     console.log("signInWithGoogle function called");
     const { error } = await supabase.auth.signInWithOAuth({
@@ -46,10 +33,15 @@ const LoginPage = () => {
 
     console.log("Google sign-in successful, checking session");
 
-    // Wait for the user to be redirected back
-    const { data: { session } } = await supabase.auth.getSession();
-
-    console.log("Session retrieved:", session);
+    // Wait for the session to be initialized
+    let session = null;
+    for (let i = 0; i < 5; i++) {
+      console.log(`Attempt ${i + 1} to retrieve session`);
+      const { data } = await supabase.auth.getSession();
+      session = data.session;
+      if (session) break;
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before trying again
+    }
 
     if (!session || !session.user) {
       console.error("No session or user found after sign-in");
