@@ -27,18 +27,15 @@ const Footer: Component = () => {
   const footerContent = {
     appName: 'Snack Champion',
     appUrl: '/about',
-    githubUrl: 'https://github.com/lissy93/cso',
-    developer: 'Alicia Sykes',
-    developerUrl: 'https://aliciasykes.com',
-    license: 'MIT',
-    licenseUrl: 'https://github.com/lissy93/cso/blob/main/LICENSE',
+    githubUrl: 'https://github.com/09aghandhi/hamilton_snacks',
+    developer: 'Alicia Sykes / Atul Ghandhi',
+    developerUrl: 'https://atul.uk',
     licenseDate: new Date().getFullYear(),
   };
 
   return (
     <StyledFooter>
       <a href={footerContent.appUrl}>{footerContent.appName}</a> is
-      licensed under <a href={footerContent.licenseUrl}>{footerContent.license}</a> ©
       <a href={footerContent.developerUrl}>{footerContent.developer}</a> {footerContent.licenseDate} |
       Source code available on <a href={footerContent.githubUrl}>GitHub</a>.
     </StyledFooter>
