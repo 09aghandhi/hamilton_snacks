@@ -3,6 +3,7 @@ import { styled } from 'solid-styled-components';
 import supabase from '../services/supabaseClient';
 import Card from '../components/atoms/Card';
 import Button from '../components/atoms/Button';
+// import { createEffect } from 'solid-js';
 
 const SnackBot = styled('img')`
   position: absolute;
@@ -21,6 +22,7 @@ const LoginPage = () => {
 
   const signInWithGoogle = async () => {
     console.log("signInWithGoogle function called");
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
     });
@@ -50,17 +52,22 @@ const LoginPage = () => {
     }
 
     const user = session.user;
-    console.log("User email:", user.email);
+    console.log("Retrieved user object:", user);
+
+    const userEmail = user.email || '';
+    console.log("User email:", userEmail);
 
     const allowedDomain = 'and.digital';
+    const emailDomain = userEmail.split('@')[1];
+    console.log("Extracted email domain:", emailDomain);
 
-    if (user.email && user.email.endsWith(`@${allowedDomain}`)) {
+    if (emailDomain === allowedDomain) {
       console.log("Email domain is allowed, navigating to home page");
       navigate('/');
     } else {
       console.warn("Email domain is not allowed, signing out user");
       await supabase.auth.signOut();
-      alert('You must use an email ending in @and.digital to sign in.');
+      alert(`You must use an email ending in @${allowedDomain} to sign in.`);
     }
   };
 
