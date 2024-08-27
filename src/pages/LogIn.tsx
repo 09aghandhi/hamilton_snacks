@@ -23,37 +23,50 @@ const LoginPage = () => {
 
   // Redirect to home page if already authenticated
   createEffect(() => {
+    console.log("Running createEffect to check authentication status");
     if (isAuthenticated()) {
+      console.log("User is authenticated, navigating to home page");
       navigate('/');
+    } else {
+      console.log("User is not authenticated, staying on login page");
     }
   });
 
   const signInWithGoogle = async () => {
+    console.log("signInWithGoogle function called");
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
     });
 
     if (error) {
+      console.error("Error during Google sign-in:", error.message);
       alert(error.message);
       return;
     }
 
+    console.log("Google sign-in successful, checking session");
+
     // Wait for the user to be redirected back
     const { data: { session } } = await supabase.auth.getSession();
 
+    console.log("Session retrieved:", session);
+
     if (!session || !session.user) {
+      console.error("No session or user found after sign-in");
       alert('User session could not be retrieved. Please try again.');
       return;
     }
 
     const user = session.user;
+    console.log("User email:", user.email);
+
     const allowedDomain = 'and.digital';
 
     if (user.email && user.email.endsWith(`@${allowedDomain}`)) {
-      // If the email domain is allowed, navigate to the home page
+      console.log("Email domain is allowed, navigating to home page");
       navigate('/');
     } else {
-      // If the email domain is not allowed, sign the user out immediately
+      console.warn("Email domain is not allowed, signing out user");
       await supabase.auth.signOut();
       alert('You must use an email ending in @and.digital to sign in.');
     }
