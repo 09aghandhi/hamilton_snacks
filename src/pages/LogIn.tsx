@@ -35,25 +35,29 @@ const LoginPage = () => {
 
     if (error) {
       alert(error.message);
+      return;
     }
-  };
 
-  // Check the user's session and validate the email domain
-  createEffect(async () => {
+    // Wait for the user to be redirected back
     const { data: { session } } = await supabase.auth.getSession();
 
-    const user = session?.user;
+    if (!session || !session.user) {
+      alert('User session could not be retrieved. Please try again.');
+      return;
+    }
+
+    const user = session.user;
     const allowedDomain = 'and.digital';
 
-    if (user?.email && user.email.endsWith(`@${allowedDomain}`)) {
+    if (user.email && user.email.endsWith(`@${allowedDomain}`)) {
       // If the email domain is allowed, navigate to the home page
       navigate('/');
-    } else if (user) {
+    } else {
       // If the email domain is not allowed, sign the user out immediately
       await supabase.auth.signOut();
-      alert('You must use a corporate email to sign in.');
+      alert('You must use an email ending in @and.digital to sign in.');
     }
-  });
+  };
 
   const styles = `
     .intro {
