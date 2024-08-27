@@ -3,7 +3,7 @@ import { styled } from 'solid-styled-components';
 import { fetchUserFromSession, useUserEmail } from '../../services/authService';
 
 import supabase from '../../services/supabaseClient';
-import toast from 'solid-toast';
+// import toast from 'solid-toast';
 import { Show, createResource, createSignal, createEffect, onCleanup } from 'solid-js';
 
 const WelcomeMsg = styled('h2')`
@@ -46,7 +46,7 @@ const fetchSnackDeliveries = async () => {
       .from('Orders')
       .select('*');
     if (error) {
-      toast.error('Unable to fetch order delivery date.');
+      // toast.error('Unable to fetch order delivery date.');
       return [];
     }
     return data;
